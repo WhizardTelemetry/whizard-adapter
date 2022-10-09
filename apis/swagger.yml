@@ -1,0 +1,169 @@
+---
+swagger: "2.0"
+schemes:
+  - "http"
+  - "https"
+produces:
+  - "application/json"
+  - "text/plain"
+consumes:
+  - "application/json"
+  - "text/plain"
+info:
+  title: "Whizard Tenant API"
+  version: "0.5.0"
+  description: |
+    API is an HTTP API served by Whizard's Tenant. 
+tags:
+  # primary objects
+  - name: "Tenant"
+    x-displayName: "Tenant"
+    description: "create and manage tenants in Whizard"
+
+
+paths:
+  /tenants:
+    post:
+      summary: "create a tenant"
+      description: |
+        Create a tenant in whizard.
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "request body which contains tenant creation information"
+          schema:
+            $ref: "#/definitions/TenantCreateRequest"
+      responses:
+        200:
+          description: "no error"
+        400:
+          description: "bad parameter"
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          $ref: "#/responses/500ErrorResponse"
+
+  /tenants/{tenant}:
+    get:
+      summary: "get a tenant"
+      description: |
+        return low-level information of the tennat.
+      produces:
+          - "application/json"
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          description: "the name of tenant"
+          type: string
+      responses:
+        200:
+          description: "no error"
+          schema: 
+            $ref: "#/definitions/TenantInfo"
+        404: 
+            $ref: "#/responses/404ErrorResponse"
+        500:
+            $ref: "#/responses/500ErrorResponse"
+
+    put:
+      summary: "update a tenant"
+      description: |
+        Update information of a tenant.
+      consumes:
+          - "application/json"
+      produces:
+          - "application/json"
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          description: "the name of tenant"
+          type: string
+        - name: "TenantUpdateRequest"
+          in: "body"
+          description: |
+            request body which contains tenant update information"
+          schema:
+            $ref: "#/definitions/TenantUpdateRequest"
+      responses:
+        200:
+          description: "no error"
+        500:
+            $ref: "#/responses/500ErrorResponse"
+
+    delete:
+      summary: "delete a tenant"
+      description: |
+        delete a tenant in whizard.
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          description: "the name of tenant"
+          type: string
+      responses:
+        200:
+          description: "no error"
+        500:
+          $ref: "#/responses/500ErrorResponse"
+
+
+
+definitions:
+  Error:
+    type: "object"
+    properties:
+      message:
+        type: string
+
+  TenantCreateRequest:
+    type: "object"
+    description: ""
+    properties:
+      name:
+        type: "string"
+        description: |
+          Tenant name.
+      service:
+        type: "string"
+      storage: 
+        type: "string"
+
+  TenantInfo:
+    type: "object"
+    description: "detailed information about tenant in whizard."
+    properties:
+      tenantID:
+        type: "string"
+        description: "ID of the Tenant."
+      service:
+        type: "string"
+      storage: 
+        type: "string"
+      compactor:
+        type: "string"
+      ingester:
+        type: "string"
+      ruler: 
+        type: "string"
+
+
+  TenantUpdateRequest:
+    type: "object"
+    description: "request used to update Tenant attributes."
+    properties:
+      service:
+        type: "string"
+      storage: 
+        type: "string"
+
+responses:
+  404ErrorResponse:
+    description: An unexpected 404 error occurred.
+    schema:
+      $ref: "#/definitions/Error"
+  500ErrorResponse:
+    description: An unexpected server error occurred.
+    schema:
+      $ref: "#/definitions/Error"
