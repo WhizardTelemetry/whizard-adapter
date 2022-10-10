@@ -43,8 +43,8 @@ func NewOptions() *Options {
 		},
 		LeaderElect: false,
 
-		MetricsBindAddress:     ":8080",
-		HealthProbeBindAddress: ":8081",
+		MetricsBindAddress:     ":9092",
+		HealthProbeBindAddress: ":9091",
 	}
 }
 
@@ -75,8 +75,8 @@ func (s *Options) Flags() cliflag.NamedFlagSets {
 	})
 
 	ofs := fss.FlagSet("other")
-	ofs.StringVar(&s.MetricsBindAddress, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
-	ofs.StringVar(&s.HealthProbeBindAddress, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
+	ofs.StringVar(&s.MetricsBindAddress, "metrics-bind-address", ":9092", "The address the metric endpoint binds to.")
+	ofs.StringVar(&s.HealthProbeBindAddress, "health-probe-bind-address", ":9091", "The address the probe endpoint binds to.")
 
 	return fss
 }

@@ -25,7 +25,7 @@ on:
 
 
 env:
-  REPO: frezes
+  REPO: kubesphere
 
 jobs:
   build:
